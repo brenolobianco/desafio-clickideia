@@ -31,6 +31,6 @@ RUN chown -R www-data:www-data /var/www/html \
 
 RUN apt-get update && apt-get install -y phpmyadmin 
 
-EXPOSE 8000
+EXPOSE 5000
 
-CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD php artisan serve --host=0.0.0.0 --port=5000
