@@ -16,7 +16,7 @@
 7. run : php artisan serve
 ## Observaçoes:
 
-- Tive alguns problemas ao configurar o jwt, onde acabei perdendo mt tempo e se persistisse n conseguiria entregar o teste a tempo, nunca usei este metodo. Entao optei por utilizar o sanctum, do qual estou mais habituado. Criei  um seeder que popula as credencias de usuario no banco.
+- Tive alguns problemas ao configurar o jwt, onde acabei perdendo muito tempo e se persistisse não conseguiria entregar o teste a tempo, nunca usei este metodo. Entao optei por utilizar o sanctum, do qual estou mais habituado. Criei  um seeder que popula as credencias de usuario no banco.
 
 # FRONTEND
 
