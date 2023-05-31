@@ -1,4 +1,4 @@
-# desafio-clickideia FRONT END
+# desafio-clickideia FRONTEND
 
 
 ### Como rodar a aplicação via docker:
