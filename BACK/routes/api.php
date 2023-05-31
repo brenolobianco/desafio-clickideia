@@ -18,17 +18,11 @@ use App\Http\Controllers\AuthController;
 */
 Route::post('/login',  [AuthController::class, 'login']);
 
+// rotas protegidas
 
-Route::get('/cards', [CardController::class, 'index']);
-Route::post('/cards', [CardController::class, 'store']);
-Route::put('/cards/{id}', [CardController::class, 'update']);
-Route::delete('/cards/{id}', [CardController::class, 'destroy']);
-
-
-
-Route::middleware('auth.jwt')->group(function () {
-    // Route::get('/cards', 'CardController@index');
-    // Route::post('/cards', 'CardController@store');
-    // Route::put('/cards/{id}', 'CardController@update');
-    // Route::delete('/cards/{id}', 'CardController@destroy');
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::get('/cards', [CardController::class, 'index']);
+    Route::post('/cards', [CardController::class, 'store']);
+    Route::put('/cards/{id}', [CardController::class, 'update']);
+    Route::delete('/cards/{id}', [CardController::class, 'destroy']);
 });

@@ -1,36 +1,28 @@
-
-FROM php:latest
-
+FROM php:8.2-apache
 
 WORKDIR /var/www/html
 
-RUN apt-get update && apt-get install -y \
-    git \
-    libzip-dev \
-    unzip \
-    zip
-
-RUN docker-php-ext-install \
-    pdo_mysql \
-    zip
-
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 COPY . /var/www/html
 
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+RUN a2enmod rewrite
+
+COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
+
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN composer install --optimize-autoloader --no-dev
 
 RUN php artisan key:generate
 
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+EXPOSE 8080
 
-
-RUN apt-get update && apt-get install -y phpmyadmin 
-
-EXPOSE 5000
-
-CMD php artisan serve --host=0.0.0.0 --port=5000
+CMD ["docker-entrypoint.sh"]

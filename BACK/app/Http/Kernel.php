@@ -53,7 +53,8 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth.jwt' => \App\Http\Middleware\VerifyToken::class,
+        
+        'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
     ];
     
     protected $middlewareAliases = [

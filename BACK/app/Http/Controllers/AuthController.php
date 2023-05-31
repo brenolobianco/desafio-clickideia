@@ -4,27 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Login do usuário
+     */
     public function login(Request $request)
     {
-        $credentials = $request->only('login', 'senha');
+        $request->validate([
+            'login' => 'required|string',
+            'password' => 'required|string'
+        ]);
 
-        if ($credentials['login'] !== env('LOGIN') || $credentials['senha'] !== env('SENHA')) {
-            return response()->json(['error' => 'Credenciais inválidas'], 401);
+        // Checa o login do usuário
+        $user = User::where('login', $request->login)->first();
+
+        // Valida o usuário e checa a senha
+        if (!$user || $request->password !== $user->password) {
+            return response([
+                'message' => 'Senha inválida'
+            ], 401);
         }
 
-        $user = User::where('email', $credentials['login'])->first();
+        $token = $user->createToken('primeirotoken')->plainTextToken;
 
-        if (!$user) {
-            return response()->json(['error' => 'Credenciais inválidas'], 401);
-        }
+        $response = [
+            'user' => $user,
+            'token' => $token
+        ];
 
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(['token' => $token]);
+        return response($response, 201);
     }
+
+ 
 }

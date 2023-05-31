@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { MdAdd } from 'react-icons/md';
 
 interface NewCardProps {
   onCreate: (newCard: Card) => void;
@@ -14,11 +15,19 @@ interface Card {
 }
 
 const Container = styled.div`
-  margin-bottom: 20px;
+   background-color: #f5f5f5;
+  border-radius: 4px;
+  padding: 25px;
+  margin-bottom: 16px;
+  width: 250px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Input = styled.input`
-  width: 100%;
+  width: 90%;
   margin-bottom: 10px;
   padding: 8px;
   border: 1px solid #cccccc;
@@ -26,7 +35,7 @@ const Input = styled.input`
 `;
 
 const TextArea = styled.textarea`
-  width: 100%;
+  width: 90%;
   margin-bottom: 10px;
   padding: 8px;
   border: 1px solid #cccccc;
@@ -81,7 +90,7 @@ const NewCard: React.FC<NewCardProps> = ({ onCreate }) => {
         value={newCard.conteudo}
         onChange={handleInputChange}
       />
-      <Button onClick={handleCreate}>Criar Card</Button>
+      <Button onClick={handleCreate}><MdAdd /></Button>
     </Container>
   );
 };

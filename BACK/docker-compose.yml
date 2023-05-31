@@ -1,29 +1,41 @@
-version: '3'
+version: "3.8"
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '5000:5000'
-    env_file:
-      - .env
+      - "5000:80"
+    volumes:
+      - .:/var/www/html
     depends_on:
-      - db
-  db:
-    image: mysql:latest
+      - dbclick
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: dbclick
+      DB_PORT: 3306
+      DB_DATABASE: laravel
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+    command: sh -c "php artisan migrate --force && php artisan db:seed --force && apache2-foreground"
+
+  dbclick:
+    image: mysql:5.7
+    environment:
       MYSQL_DATABASE: laravel
-    ports:
-      - '3306:3306'
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin
     ports:
-      - 8080:80
-    depends_on:
-      - db
+      - "8080:80"
     environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
+      PMA_HOST: dbclick
+      MYSQL_ROOT_PASSWORD: secret
+    depends_on:
+      - dbclick
+
+volumes:
+  db_data:
